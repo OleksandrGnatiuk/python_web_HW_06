@@ -10,10 +10,10 @@ LIMIT 5;
 -- 2 Знайти студента із найвищим середнім балом з певного предмета.
 SELECT s.fullname, d.name, ROUND(AVG(g.grade), 2) AS average_mark
 FROM grades AS g 
-LEFT JOIN students AS s ON s.id = g.student_id 
-LEFT JOIN disciplines AS d ON d.id = g.discipline_id 
+JOIN students AS s ON s.id = g.student_id 
+JOIN disciplines AS d ON d.id = g.discipline_id 
 WHERE d.id = 2
-GROUP BY s.id
+GROUP BY s.fullname, d.name
 ORDER BY AVG(g.grade) DESC 
 LIMIT 1;
 
@@ -25,7 +25,7 @@ LEFT JOIN students AS s ON s.id  = g.student_id
 LEFT JOIN disciplines AS d ON d.id = g.discipline_id 
 LEFT JOIN groups AS g2 ON g2.id = s.group_id
 WHERE d.id = 1
-GROUP BY g2.id 
+GROUP BY g2.id, d.name
 ORDER BY AVG(g.grade) DESC;
 
 
@@ -37,7 +37,7 @@ FROM grades AS g;
 SELECT t.fullname, d.name  
 FROM disciplines AS d 
 LEFT JOIN teachers AS t ON t.id = d.teacher_id 
-WHERE t.id = 2
+WHERE t.id = 2;
 
 -- 6 Знайти список студентів у певній групі.
 SELECT g.name, s.fullname
@@ -59,8 +59,9 @@ ORDER BY s.fullname DESC;
 SELECT t.fullname  AS teacher , ROUND(AVG(g.grade),2) AS average_mark
 FROM disciplines d 
 LEFT JOIN grades g ON g.discipline_id = d.id 
-LEFT JOIN teachers t ON t.id = d.teacher_id 
-WHERE t.id = 4;
+LEFT JOIN teachers t ON t.id = d.teacher_id
+WHERE t.id = 4
+group by t.fullname;
 
 
 -- 9 Знайти список курсів, які відвідує студент.
@@ -69,7 +70,8 @@ FROM grades AS g
 LEFT JOIN students AS s ON s.id = g.student_id
 LEFT JOIN disciplines AS d ON d.id = g.discipline_id
 WHERE s.id = 9
-GROUP BY d.id 
+GROUP BY d.id, s.fullname;
+
 
 -- 10 Список курсів, які певному студенту читає певний викладач.
 SELECT d.name AS subject, s.fullname AS student, t.fullname AS teacher 
@@ -77,8 +79,9 @@ FROM grades AS g
 LEFT JOIN disciplines AS d ON d.id = g.discipline_id 
 LEFT JOIN teachers AS t ON t.id = g.discipline_id
 LEFT JOIN students AS s ON s.id = g.student_id
-WHERE s.id = 10 AND t.id = 2
-GROUP BY d.id 
+WHERE s.id = 11 AND t.id = 3
+GROUP BY d.id, s.fullname, t.fullname;
+
 
 -- 11 Середній бал, який певний викладач ставить певному студентові.
 SELECT t.fullname AS TEACHER, s.fullname AS STUDENT, ROUND(AVG(g.grade), 2) AS AVERAGE_MARK
@@ -86,12 +89,9 @@ FROM grades AS g
 LEFT JOIN disciplines AS d ON d.id = g.discipline_id 
 LEFT JOIN teachers AS t ON t.id = d.teacher_id 
 LEFT JOIN students AS s ON s.id  = g.student_id
-WHERE s.id = 4 AND t.id = 3;
-
+WHERE s.id = 4 AND t.id = 3
+GROUP BY t.fullname, s.fullname;
 
 -- 12 Оцінки студентів у певній групі з певного предмета на останньому занятті.
-
-
-
 
 
